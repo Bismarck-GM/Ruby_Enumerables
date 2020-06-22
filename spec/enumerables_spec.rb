@@ -75,7 +75,7 @@ describe Enumerable do
     end
     it "Must return false if array is falsey." do
       expect(arr_falsey.my_any?).not_to eql(true)
-    end 
+    end
     it "Must give same result as #any? when block given." do 
       expect(arr.my_any?{|value| value >= 2 }).to eql(arr.any?{|value| value >= 2 })
     end
@@ -86,5 +86,27 @@ describe Enumerable do
       expect(arr_empty.my_any?).not_to eql(true)
     end
   end
-  
+  describe "#my_none?" do
+    it "Must return true if the block never returns true for all elements." do
+      expect(arr_words.my_none? { |word| word.length == 5 }).to equal(true)
+    end
+    it "Must return false if the block returns true for a element." do
+      expect(arr_words.my_none? { |word| word.length >= 4 }).not_to equal(true)
+    end
+    it "Must return false if at least one element matches the regular expression." do 
+      expect(arr_words.my_none?(/d/)).not_to eql(true)
+    end
+    it "Must return true if array is empty." do 
+      expect(arr_empty.my_none?).not_to eql(false)
+    end
+    it "Must return true if array is falsey." do
+      expect(arr_falsey.my_none?).not_to eql(false)
+    end
+    it "Must use an argument instead of block when given an argument and a block." do
+      expect(arr.my_none?(/t/) { |v| v >= 0 }).not_to eql(false)
+    end
+    it "Must give same result as #none? when block given." do 
+    expect(arr.my_none?{|value| value >= 2 }).to eql(arr.none?{|value| value >= 2 })
+    end
+  end
 end
