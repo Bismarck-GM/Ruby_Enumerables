@@ -145,4 +145,21 @@ describe Enumerable do
       expect(arr.my_map).to be_a(Enumerator)
     end
   end
+  describe '#my_inject' do 
+    it 'Must return same value as #inject when passed a block.' do 
+      expect(arr.my_inject { |value| value * 2 }).to eql(arr.inject { |value| value * 2 })
+    end
+    it 'Must return same value as #inject when passed a range.' do 
+      expect(my_range.my_inject{ |sum, n| sum + n }).to eql(my_range.inject { |sum, n| sum + n })
+    end  
+    it 'Must accept multiple arguments and symbols.' do
+      expect(my_range.my_inject(1, :*)).to eql(120)
+    end
+    it 'Must raise LocalJumpError when no block is given.' do
+      expect {arr.my_inject}.to raise_error(LocalJumpError)
+    end
+    it 'Must use first element in enum as starting value when given a block.' do
+      expect(arr.my_inject(10)  { |product, n| product * n } ).to eql(12000)
+    end
+  end
 end
