@@ -162,4 +162,9 @@ describe Enumerable do
       expect(arr.my_inject(10)  { |product, n| product * n } ).to eql(12000)
     end
   end
+  describe '#multiply_els' do 
+    it 'Must multiply the elements using my inject to produce the correct output.' do 
+      expect(arr.multiply_els).to eql(120)
+    end
+  end
 end
