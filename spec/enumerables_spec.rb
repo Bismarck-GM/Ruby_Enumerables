@@ -10,6 +10,7 @@ describe Enumerable do
   let(:arr_falsey) { [false, nil, 1>2] }
   let(:arr_empty) {[]}
   let(:my_range) { 1..5 }
+  let(:my_map_arg) { proc { |x| x**2 } }
 
   describe "#my_each" do
     it 'If no block is given, an Enumerator is returned.' do
@@ -128,6 +129,20 @@ describe Enumerable do
     end
     it 'Must accept a range' do
       expect(my_range.my_count { |x| (x % 2).zero? }).not_to eql(3)
+    end
+  end
+  describe '#my_map' do
+    it 'Must return a new array with the results of running block once for every element in enum.' do
+      expect(arr.my_map { |value| value * 2 }).to eql([2, 4, 6, 8, 10])
+    end
+    it 'Must accept a range and return a new array with the results of running block.' do
+      expect(my_range.my_map { |value| value * 2 }).to eql([2, 4, 6, 8, 10])
+    end
+    it "Must use an argument (block) instead of block when given an argument and a block." do
+      expect(arr.my_map(my_map_arg) { |value| value }).to eql([1, 4, 9, 16, 25])
+    end
+    it 'If no block is given, an enumerator is returned instead.' do
+      expect(arr.my_map).to be_a(Enumerator)
     end
   end
 end
