@@ -12,6 +12,9 @@ describe Enumerable do
     it 'Calls the given block once for each element in self, passing that element as a parameter. Returns the array itself.' do
       expect(arr.my_each { |x| x }).to eql(arr.each { |x| x })
     end
+    it 'Must throw argument error if given arguments ().' do
+      expect { arr.my_each(9) }.to raise_error(ArgumentError)
+    end
   end
   describe "#my_each_with_index" do
     it 'If no block is given, an enumerator is returned instead.' do
@@ -20,8 +23,25 @@ describe Enumerable do
     it 'If no block is given, an enumerator is returned instead.' do
       expect(arr.my_each_with_index).to be_a(Enumerator)
     end
-    it 'Must return same value as each_with_index if block given.' do
+    it 'Must return same value as #each_with_index if block given.' do
       expect(arr.my_each_with_index { |i, v| i + v }).to eql(arr.each_with_index { |i, v| i + v })
+    end
+    it 'Must throw argument error if given arguments ().' do
+      expect { arr.my_each_with_index(9) }.to raise_error(ArgumentError)
+    end
+  end
+  describe "#my_select" do
+    it 'If no block is given, an enumerator is returned instead.' do
+      expect(arr.my_select).not_to eql(arr)
+    end
+    it 'If no block is given, an enumerator is returned instead.' do
+      expect(arr.my_select).to be_a(Enumerator)
+    end
+    it 'Must return same value as #select if block given.' do
+      expect(arr.my_select { |v| v > 3 }).to eql(arr.select { |v| v > 3 })
+    end
+    it 'Must throw argument error if given arguments ().' do
+      expect { arr.my_select(9) }.to raise_error(ArgumentError)
     end
   end
   
