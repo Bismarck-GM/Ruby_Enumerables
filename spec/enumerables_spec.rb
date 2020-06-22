@@ -6,6 +6,9 @@ describe Enumerable do
   let(:hash) { Hash.new }
   let(:arr_words) { %w(cat dog wombat) }
   let(:arr_with_ts) { %w(ant bat cat) }
+  let(:arr_nums_strings) { [1, 2, "a_string", "another_string"] }
+  let(:arr_falsey) { [false, nil, 1>2] }
+  let(:arr_empty) {[]}
 
   describe "#my_each" do
     it 'If no block is given, an Enumerator is returned.' do
@@ -56,11 +59,31 @@ describe Enumerable do
     it "Must return true if no block is given." do
       expect(arr_words.my_all?).not_to eql(false)
     end 
-    it "Must give same result as all? when block given. " do 
+    it "Must give same result as #all? when block given. " do 
       expect(arr.my_all?{|value| value >= 2 }).to eql(arr.all?{|value| value >= 2 })
     end
     it "Must use an argument instead of block when given an argument and a block." do
       expect(arr.my_all?(/t/) { |v| v >= 0 }).not_to eql(true)
+    end
+  end
+  describe "#my_any" do
+    it "Must return true if at least one element matches the regular expression." do 
+      expect(arr_words.my_any?(/t/)).to eql(true)
+    end
+    it "Must return true if at least one element matches the given class." do 
+      expect(arr_nums_strings.my_any?(Integer)).to eql(true)
+    end
+    it "Must return false if array is falsey." do
+      expect(arr_falsey.my_any?).not_to eql(true)
+    end 
+    it "Must give same result as #any? when block given." do 
+      expect(arr.my_any?{|value| value >= 2 }).to eql(arr.any?{|value| value >= 2 })
+    end
+    it "Must use an argument instead of block when given an argument and a block." do
+      expect(arr.my_any?(/t/) { |v| v >= 0 }).not_to eql(true)
+    end
+    it "Must return false if array is empty." do 
+      expect(arr_empty.my_any?).not_to eql(true)
     end
   end
   
