@@ -9,6 +9,7 @@ describe Enumerable do
   let(:arr_nums_strings) { [1, 2, "a_string", "another_string"] }
   let(:arr_falsey) { [false, nil, 1>2] }
   let(:arr_empty) {[]}
+  let(:my_range) { 1..5 }
 
   describe "#my_each" do
     it 'If no block is given, an Enumerator is returned.' do
@@ -107,6 +108,26 @@ describe Enumerable do
     end
     it "Must give same result as #none? when block given." do 
     expect(arr.my_none?{|value| value >= 2 }).to eql(arr.none?{|value| value >= 2 })
+    end
+  end
+  describe "#my_count" do
+    it 'Must return the number of elements when no block or arguments are given' do
+      expect(arr.my_count).to eql(5)
+    end
+    it 'Must return the number of items in enum that are counted if an argument is given' do
+      expect(arr.my_count(1)).not_to eql(2)
+    end
+    it 'Must return the number of items in enum that are counted using the block that is passed' do
+      expect(arr.my_count { |x| (x % 2).zero? }).to eql(2)
+    end
+    it 'Must give same result as #count when block given.' do
+    expect(arr.my_count { |x| (x % 2).zero? }).to eql(arr.count { |x| (x % 2).zero? })
+    end
+    it "Must use an argument instead of block when given an argument and a block." do
+      expect(arr.my_count(2) { |value| value }).not_to eql(3)
+    end
+    it 'Must accept a range' do
+      expect(my_range.my_count { |x| (x % 2).zero? }).not_to eql(3)
     end
   end
 end
